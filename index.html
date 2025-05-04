@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+    #controlc:hover{
+        width:98vw;
+        padding:1vw;
+        height:20vh;
+        border-radius:25px 25px 0px 0px;
+        background-color: rgb(59, 59, 59);
+        color:white;
+        position:absolute;
+        bottom:0;
+        transition:0.2s;
+    }
+    #controlc{
+        width:8vw;
+        padding:1vw;
+        height:1vh;
+        border-radius:25px 25px 0px 0px;
+        background-color: rgb(59, 59, 59);
+        color:white;
+        position:absolute;
+        bottom:0;
+        left:50%;
+        transform: translate(-50%,0%);
+        transition:0.2s;
+    }
+    #screen{
+        display:block;
+        justify-content:center;
+        width:auto;
+        position:absolute;
+        left:50%;
+        transform: translate(-50%,-0%);
+    }
+    body{
+        margin:0;
+        padding:0;
+        overflow:hidden;
+        background: linear-gradient()
+    }
+    #foto{
+        max-height:99vh;
+        max-width:99vw;
+        position:absolute;
+    }
+    #background{
+        position:absolute;
+        left:20%;
+        top:1vw;
+        display:none;
+    }
+    #dimensions{
+        position:absolute;
+        left:30%;
+        top:1vw;
+        display:none;
+    }
+    #screenshot{
+        display:none;
+    }
+    #controlc:hover  #dimensions{
+        display:block;
+    }
+    #controlc:hover  #background{
+        display:block;
+    }
+    #controlc:hover  #screenshot{
+        display:block;
+    }
+    #degress{
+        width:6vw;
+    }
+
+    @media only screen and (max-width: 740px) {
+        body{
+            font-family: Arial;
+        }
+        #background{
+        position:absolute;
+        left:30%;
+        top:1vw;
+        display:none;
+    } 
+    #dimensions{
+        position:absolute;
+        left:60%;
+        top:1vw;
+        display:none;
+    }
+    #screenshot{
+        position:absolute;
+        top:1vw;
+        left:5%;
+        display:none;
+    }
+    input{
+        width:20.5vw;
+        border-radius:3px;
+        border:none;
+        outline:none;
+    }
+    #color{
+        width:4vw; 
+    }
+    #gradient{
+        width:4vw;
+    }
+    }
+</style>
+</head>
+<body>
+
+<div id="screen" onclick="hidecontr()">
+    <img id="foto">
+</div>
+
+<div id="controlc" onclick="showcontr()">
+    <div id="screenshot">
+        <input id="inp" type="file">
+        <br>
+        <button onclick="jef()">Add</button>
+        <br>
+        <br>
+        <input oninput="imageposition()" id="imgx" type="number" placeholder="image x">
+        <br>
+        <input oninput="imageposition()" id="imgy" type="number" placeholder="image y">
+    </div>
+    <div id="background">
+        <input type="radio" name="achtergrond" id="color" value="color">
+        <label for="color">Color</label>
+        <br>
+        <input type="radio" name="achtergrond" id="gradient" value="gradient">
+        <label for="gradient">Gradient</label>
+        <br>
+        <br>
+        <input onchange="screenbackground()" id="kleur1" type="color">
+        <br>
+        <input onchange="screenbackground()" id="kleur2" type="color">
+        <br>
+        <input onchange="screenbackground()" id="degress" type="number" value="135">
+    </div>
+    <div id="dimensions">
+        <input oninput="screendimenstions()" id="scrwidth" type="number" placeholder="screen width">
+        <br>
+        <input oninput="screendimenstions()" id="scrheight" type="number" placeholder="screen height">
+        <br>
+        <br>
+        <input oninput="imagedimenstions()" id="imgwidth" type="number" placeholder="image width">
+        <br>
+        <input oninput="imagedimenstions()" id="imgheight" type="number" placeholder="image height">
+        <br>
+        <input oninput="imagedimenstions()" id="imgborder" type="number" placeholder="image border">
+    </div>
+</div>
+
+<script>
+var gradient = 0;
+
+function jef(){
+var bestad = document.getElementById("inp");
+var bestand = bestad.files[0];
+document.getElementById("foto").src = URL.createObjectURL(bestand);
+}
+
+function imageposition(){
+    var x = document.getElementById("imgx").value;
+    var y = document.getElementById("imgy").value;
+
+    document.getElementById("foto").style.left = x + "px";
+    document.getElementById("foto").style.top = y + "px";
+}
+
+function imagedimenstions(){
+    var imwidth = document.getElementById("imgwidth").value;
+    var imheight = document.getElementById("imgheight").value;
+    var imborder = document.getElementById("imgborder").value;
+
+    document.getElementById("foto").style.width = imwidth + "px";
+    document.getElementById("foto").style.height = imheight + "px";
+    document.getElementById("foto").style.borderRadius = imborder + "px";
+}
+
+function screendimenstions(){
+    var scrwidth = document.getElementById("scrwidth").value;
+    var scrheight = document.getElementById("scrheight").value;
+
+    document.getElementById("screen").style.width = scrwidth + "px";
+    document.getElementById("screen").style.height = scrheight + "px";
+}
+
+function screenbackground(){
+    if(document.getElementById('color').checked) {
+        var kleur = document.getElementById("kleur1").value;
+        console.log(kleur);
+        document.getElementById("screen").style.backgroundColor = kleur;
+    } else if(document.getElementById('gradient').checked) {
+        var kleur = document.getElementById("kleur1").value;
+        var kleur2 = document.getElementById("kleur2").value;
+        var degres = document.getElementById("degress").value;
+        document.getElementById("screen").style.background = `linear-gradient(${degres}deg,${kleur},${kleur2})`;
+    }
+}
+
+var hide = 0;
+
+document.addEventListener("keydown", (event) => {
+            if(event.key === " "){
+                if(hide === 0){
+                    hide++;
+                    document.getElementById("controlc").style.display = "none";
+                } else {
+                    hide = 0;
+                    document.getElementById("controlc").style.display = "block";
+                }
+                
+            }
+        })
+
+function hidecontr(){
+    document.getElementById("controlc").style.opacity = 0;
+}
+
+function showcontr(){
+    document.getElementById("controlc").style.opacity = 1;
+}
+</script>
+</body>
+</html>
